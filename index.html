@@ -2,94 +2,694 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Be My Valentine 😌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be My Valentine 💝</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: linear-gradient(135deg, #ffb6c1, #ffe6f0);
-      font-family: 'Comic Sans MS', cursive;
-      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      text-align: center;
-      overflow: hidden;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* Floating hearts background */
+    .heart-bg {
+      position: fixed;
+      font-size: 30px;
+      opacity: 0.15;
+      animation: float 15s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-100px) rotate(180deg); }
     }
 
     .box {
-      background: white;
-      padding: 35px;
-      border-radius: 25px;
-      box-shadow: 0 15px 25px rgba(0,0,0,0.25);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px 30px;
+      border-radius: 30px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      width: 100%;
+      max-width: 600px;
+      animation: slideIn 0.8s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-100px) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
     }
 
     h1 {
-      color: #ff4081;
+      background: linear-gradient(45deg, #ff6b6b, #ee5a6f, #ff006e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: clamp(1.5em, 5vw, 2.2em);
+      margin-bottom: 30px;
+      animation: pulse 2s infinite;
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .button-container {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+      position: relative;
+      min-height: 80px;
+      align-items: center;
     }
 
     button {
-      padding: 12px 25px;
-      font-size: 20px;
-      border-radius: 15px;
+      padding: 15px 35px;
+      font-size: clamp(16px, 4vw, 22px);
+      border-radius: 50px;
       border: none;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.3);
     }
 
     #yes {
-      background: #ff4081;
+      background: linear-gradient(135deg, #ff6b6b, #ff006e);
       color: white;
+      animation: glow 2s infinite;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 8px 15px rgba(255, 0, 110, 0.4); }
+      50% { box-shadow: 0 8px 30px rgba(255, 0, 110, 0.8); }
+    }
+
+    #yes:active {
+      transform: scale(0.95);
     }
 
     #no {
-      background: #999;
+      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
       color: white;
-      position: absolute;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
     }
 
     #msg {
+      margin-top: 30px;
+      font-size: clamp(16px, 4vw, 20px);
+      font-weight: bold;
+      background: linear-gradient(45deg, #ff006e, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeIn 0.5s ease;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Celebration screen */
+    .celebration {
+      display: none;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    .celebration.active {
+      display: block;
+    }
+
+    .celebration h2 {
+      font-size: clamp(2em, 6vw, 3em);
+      background: linear-gradient(45deg, #ff006e, #ffd93d, #6bcf7f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 30px;
+      animation: rainbow 3s infinite;
+    }
+
+    @keyframes rainbow {
+      0%, 100% { filter: hue-rotate(0deg); }
+      50% { filter: hue-rotate(360deg); }
+    }
+
+    .gift-box {
+      font-size: clamp(60px, 15vw, 100px);
+      margin: 30px 0;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.3s ease;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .gift-box:hover {
+      transform: scale(1.2) rotate(10deg);
+    }
+
+    .gift-message {
+      font-size: clamp(18px, 4vw, 24px);
+      color: #667eea;
       margin-top: 20px;
-      font-size: 18px;
-      color: #ff4081;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .gift-message.show {
+      display: block;
+    }
+
+    .gift-message p {
+      margin: 10px 0;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #ff006e;
+      animation: confetti-fall 3s linear infinite;
+      z-index: 1000;
+    }
+
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Stats counter */
+    .stats {
+      margin-top: 25px;
+      font-size: clamp(12px, 3vw, 14px);
+      color: #7f8c8d;
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* Secret button */
+    .secret-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: clamp(12px, 3vw, 14px);
+      background: linear-gradient(135deg, #ffd93d, #ff9a3d);
+      border-radius: 25px;
+      display: none;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .secret-btn.show {
+      display: inline-block;
+    }
+
+    .secret-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Mini games */
+    .mini-games {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      display: none;
+    }
+
+    .mini-games.show {
+      display: block;
+    }
+
+    .game-btn {
+      margin: 10px 5px;
+      padding: 12px 25px;
+      font-size: clamp(14px, 3vw, 16px);
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .game-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .love-meter {
+      margin-top: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .meter-bar {
+      width: 100%;
+      height: 30px;
+      background: #f0f0f0;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6b6b, #ff006e);
+      width: 0%;
+      transition: width 2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .question-box {
+      margin-top: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .question-box h3 {
+      color: #ff006e;
+      margin-bottom: 15px;
+      font-size: clamp(16px, 4vw, 20px);
+    }
+
+    .answer-btn {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: clamp(12px, 3vw, 14px);
+      background: #f0f0f0;
+      border: 2px solid #ddd;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .answer-btn:hover {
+      background: #ff006e;
+      color: white;
+      border-color: #ff006e;
+    }
+
+    .answer-btn.correct {
+      background: #6bcf7f;
+      color: white;
+      border-color: #6bcf7f;
+    }
+
+    .answer-btn.wrong {
+      background: #ff6b6b;
+      color: white;
+      border-color: #ff6b6b;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .box {
+        padding: 30px 20px;
+      }
+
+      button {
+        padding: 12px 25px;
+      }
+
+      .button-container {
+        min-height: 60px;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Floating hearts background -->
+  <div class="heart-bg" style="left: 10%; top: 20%; animation-delay: 0s;">💖</div>
+  <div class="heart-bg" style="left: 80%; top: 60%; animation-delay: 2s;">💕</div>
+  <div class="heart-bg" style="left: 20%; top: 70%; animation-delay: 4s;">💗</div>
+  <div class="heart-bg" style="left: 70%; top: 30%; animation-delay: 1s;">💘</div>
+  <div class="heart-bg" style="left: 50%; top: 10%; animation-delay: 3s;">💝</div>
+
   <div class="box">
-    <h1>Will you be my Valentine? 💘</h1>
-    <button id="yes" onclick="yesClicked()">YES 😍</button>
-    <button id="no" onmouseover="savageNo()">NO 🙃</button>
-    <p id="msg"></p>
+    <div id="question-screen">
+      <h1>Will you be my Valentine? 💘</h1>
+      <div class="button-container">
+        <button id="yes" onclick="yesClicked()">YES 😍</button>
+        <button id="no" onmouseover="savageNo()" ontouchstart="savageNo()">NO 🙃</button>
+      </div>
+      <p class="stats" id="stats"></p>
+      <p id="msg"></p>
+    </div>
+
+    <div class="celebration" id="celebration">
+      <h2>YAAAY! 🎉✨</h2>
+      <p style="font-size: clamp(18px, 4vw, 24px); margin-bottom: 20px;">You've made me the happiest! 💖</p>
+      
+      <div class="gift-box" onclick="openGift()" id="giftBox">🎁</div>
+      <p style="font-size: clamp(14px, 3vw, 18px); color: #7f8c8d; margin-top: 10px;">Click the gift! 👆</p>
+      
+      <div class="gift-message" id="giftMessage">
+        <p style="font-size: clamp(20px, 5vw, 28px); margin-bottom: 15px;">💝 Your Special Gift 💝</p>
+        <p style="font-size: clamp(16px, 4vw, 20px); line-height: 1.6;">
+          A lifetime supply of my love, unlimited hugs 🤗, 
+          infinite kisses 😘, and eternal happiness together! ✨
+        </p>
+        <p style="font-size: clamp(14px, 3vw, 18px); margin-top: 15px; color: #ff006e;">
+          Plus: I promise to always share my fries with you! 🍟❤️
+        </p>
+        <button class="secret-btn show" onclick="showGames()">Play Fun Games! 🎮</button>
+      </div>
+
+      <!-- Mini Games Section -->
+      <div class="mini-games" id="miniGames">
+        <h3 style="color: #ff006e; margin-bottom: 20px; font-size: clamp(18px, 4vw, 24px);">Let's Have Some Fun! 🎮</h3>
+        
+        <button class="game-btn" onclick="loveMeter()">Love Meter 💕</button>
+        <button class="game-btn" onclick="loveQuiz()">Love Quiz 💘</button>
+        <button class="game-btn" onclick="fortuneTeller()">Fortune Teller 🔮</button>
+        <button class="game-btn" onclick="resetGame()">Start Over 🔄</button>
+
+        <div id="gameArea"></div>
+      </div>
+    </div>
   </div>
 
   <script>
     let count = 0;
+    let noButtonVisible = true;
 
     function savageNo() {
       count++;
-
       const noBtn = document.getElementById("no");
+      
       const messages = [
-        "Wait 😳",
-        "Think again 🤨",
-        "Pls 🥺",
-        "Don’t do this 💔",
-        "I’ll cry 😭",
-        "Last chance 😤",
-        "Okay you’re evil 😈"
+        "Wait... 😳",
+        "Are you sure? 🤨",
+        "Please reconsider 🥺",
+        "Don't break my heart 💔",
+        "I'll be so sad 😭",
+        "Think of all the fun! 🎉",
+        "Last chance! 😤",
+        "Really? REALLY? 😱",
+        "I'm not crying... 😢",
+        "You're breaking my heart... 💔",
+        "Please? 🥹",
+        "I'll give you chocolates 🍫",
+        "Pretty please? 🙏",
+        "Think about it... 💭",
+        "Final offer! 😤"
       ];
 
-      noBtn.innerText = messages[count % messages.length];
-      noBtn.style.left = Math.random() * 80 + "vw";
-      noBtn.style.top = Math.random() * 80 + "vh";
-      noBtn.style.transform = `scale(${1 - count * 0.08})`;
+      noBtn.innerText = messages[Math.min(count - 1, messages.length - 1)] + " NO";
+      
+      // Calculate shrink - becomes invisible after ~12 dodges
+      const scale = Math.max(0.05, 1 - count * 0.08);
+      noBtn.style.transform = `scale(${scale})`;
+      
+      // Hide button when too small
+      if (scale < 0.1) {
+        noBtn.style.opacity = '0';
+        noBtn.style.pointerEvents = 'none';
+        noButtonVisible = false;
+        document.getElementById("msg").innerHTML = "The NO button has vanished! Only YES remains! 😏💖";
+      }
+      
+      // Move button randomly on screen
+      const boxRect = document.querySelector('.box').getBoundingClientRect();
+      const btnWidth = noBtn.offsetWidth * scale;
+      const btnHeight = noBtn.offsetHeight * scale;
+      
+      // Keep button within viewport
+      const maxX = window.innerWidth - btnWidth - 40;
+      const maxY = window.innerHeight - btnHeight - 40;
+      const minX = 20;
+      const minY = 20;
+      
+      const randomX = Math.random() * (maxX - minX) + minX;
+      const randomY = Math.random() * (maxY - minY) + minY;
+      
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+      
+      // Update stats
+      updateStats();
+      
+      // Make YES button bigger after 3 attempts
+      if (count >= 3) {
+        const yesBtn = document.getElementById("yes");
+        const newScale = 1 + (count - 2) * 0.1;
+        yesBtn.style.transform = `scale(${Math.min(newScale, 2)})`;
+      }
+
+      // Encouraging messages as they keep dodging
+      if (count === 5) {
+        document.getElementById("msg").innerHTML = "You're really making this hard! 😅";
+      } else if (count === 10) {
+        document.getElementById("msg").innerHTML = "I admire your determination... but please? 🥺";
+      }
+    }
+
+    function updateStats() {
+      const stats = document.getElementById("stats");
+      stats.textContent = `"No" dodges: ${count} ${count > 5 ? '😅' : ''}${count > 10 ? ' You\'re persistent!' : ''}`;
     }
 
     function yesClicked() {
-      document.getElementById("msg").innerHTML =
-        "YASSS 😍💖 You’re officially my Valentine 💐";
-      document.getElementById("no").style.display = "none";
+      const questionScreen = document.getElementById("question-screen");
+      const celebration = document.getElementById("celebration");
+      
+      questionScreen.style.display = "none";
+      celebration.classList.add("active");
+      
+      // Create confetti
+      createConfetti();
     }
+
+    function createConfetti() {
+      const colors = ['#ff006e', '#ffd93d', '#6bcf7f', '#667eea', '#f093fb'];
+      
+      for (let i = 0; i < 100; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 3 + 's';
+          confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+          document.body.appendChild(confetti);
+          
+          setTimeout(() => confetti.remove(), 5000);
+        }, i * 30);
+      }
+    }
+
+    function openGift() {
+      const giftBox = document.getElementById("giftBox");
+      const giftMessage = document.getElementById("giftMessage");
+      
+      giftBox.style.animation = "none";
+      giftBox.style.transform = "scale(0)";
+      
+      setTimeout(() => {
+        giftBox.textContent = "🎊";
+        giftBox.style.transform = "scale(1.5)";
+        giftMessage.classList.add("show");
+        createConfetti();
+      }, 300);
+    }
+
+    function showGames() {
+      document.getElementById("miniGames").classList.add("show");
+      document.getElementById("miniGames").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function loveMeter() {
+      const gameArea = document.getElementById("gameArea");
+      const lovePercent = Math.floor(Math.random() * 20) + 81; // 81-100%
+      
+      gameArea.innerHTML = `
+        <div class="love-meter">
+          <h3 style="color: #ff006e; font-size: clamp(16px, 4vw, 20px);">💕 Love Compatibility Meter 💕</h3>
+          <p style="margin: 15px 0; font-size: clamp(14px, 3vw, 16px);">Calculating our love compatibility...</p>
+          <div class="meter-bar">
+            <div class="meter-fill" id="meterFill">0%</div>
+          </div>
+          <p id="loveResult" style="margin-top: 15px; font-weight: bold; color: #ff006e; font-size: clamp(14px, 3vw, 18px);"></p>
+        </div>
+      `;
+      
+      setTimeout(() => {
+        document.getElementById("meterFill").style.width = lovePercent + "%";
+        document.getElementById("meterFill").textContent = lovePercent + "%";
+      }, 100);
+      
+      setTimeout(() => {
+        const result = lovePercent > 95 ? "PERFECT MATCH! 💖✨" : 
+                       lovePercent > 90 ? "Made for each other! 💕" :
+                       "Absolutely amazing together! 💘";
+        document.getElementById("loveResult").textContent = result;
+        createConfetti();
+      }, 2500);
+    }
+
+    function loveQuiz() {
+      const questions = [
+        {
+          q: "What's the best thing about us?",
+          answers: ["Everything! 💖", "Your smile 😊", "Our chemistry ✨", "All of the above 💕"],
+          correct: 3
+        },
+        {
+          q: "Perfect date night?",
+          answers: ["Fancy dinner 🍽️", "Movie & cuddles 🎬", "Adventure time 🏃", "Anything with you 💑"],
+          correct: 3
+        },
+        {
+          q: "How much do I love you?",
+          answers: ["A lot 💕", "So much 💖", "More than words 💘", "To infinity! 🌟"],
+          correct: 3
+        }
+      ];
+      
+      const randomQ = questions[Math.floor(Math.random() * questions.length)];
+      
+      const gameArea = document.getElementById("gameArea");
+      gameArea.innerHTML = `
+        <div class="question-box">
+          <h3>${randomQ.q}</h3>
+          ${randomQ.answers.map((ans, i) => 
+            `<button class="answer-btn" onclick="checkAnswer(${i}, ${randomQ.correct})">${ans}</button>`
+          ).join('')}
+          <p id="quizResult" style="margin-top: 15px; font-weight: bold; font-size: clamp(14px, 3vw, 16px);"></p>
+        </div>
+      `;
+    }
+
+    function checkAnswer(chosen, correct) {
+      const buttons = document.querySelectorAll('.answer-btn');
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correct) {
+          btn.classList.add('correct');
+        } else if (i === chosen && i !== correct) {
+          btn.classList.add('wrong');
+        }
+      });
+      
+      const result = chosen === correct ? 
+        "Perfect! You know me so well! 💖" : 
+        "Close! But every answer is right when it's about us! 💕";
+      
+      document.getElementById("quizResult").textContent = result;
+      if (chosen === correct) createConfetti();
+    }
+
+    function fortuneTeller() {
+      const fortunes = [
+        "🔮 I see endless dates in our future!",
+        "🔮 The stars say we're soulmates! ✨",
+        "🔮 Your fortune: Unlimited happiness with me! 💖",
+        "🔮 I predict: A lifetime of adventures together! 🌟",
+        "🔮 The crystal ball shows: We're perfect together! 💕",
+        "🔮 Your destiny: Being my Valentine forever! 💘",
+        "🔮 I foresee: Countless happy memories ahead! 🎉",
+        "🔮 The universe says: We're meant to be! 💫"
+      ];
+      
+      const gameArea = document.getElementById("gameArea");
+      gameArea.innerHTML = `
+        <div class="question-box">
+          <h3 style="font-size: clamp(18px, 4vw, 24px);">🔮 Love Fortune Teller 🔮</h3>
+          <p style="margin: 20px 0; font-size: clamp(14px, 3vw, 16px);">Revealing your romantic destiny...</p>
+          <div id="fortuneText" style="font-size: clamp(16px, 4vw, 20px); color: #ff006e; font-weight: bold; min-height: 60px; display: flex; align-items: center; justify-content: center;"></div>
+        </div>
+      `;
+      
+      let count = 0;
+      const interval = setInterval(() => {
+        document.getElementById("fortuneText").textContent = fortunes[Math.floor(Math.random() * fortunes.length)];
+        count++;
+        if (count > 5) {
+          clearInterval(interval);
+          const finalFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+          document.getElementById("fortuneText").textContent = finalFortune;
+          createConfetti();
+        }
+      }, 200);
+    }
+
+    function resetGame() {
+      location.reload();
+    }
+
+    // Make NO button touchable on mobile
+    document.getElementById('no').addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      savageNo();
+    }, { passive: false });
   </script>
 
 </body>
